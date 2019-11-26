@@ -1,5 +1,5 @@
 
 spring:
   profiles:
-    active: local,message
+    active: local,message,secured
     #active: ${env:${env.USERPROFILE:${env.ALLUSERSPROFILE:prod}}}

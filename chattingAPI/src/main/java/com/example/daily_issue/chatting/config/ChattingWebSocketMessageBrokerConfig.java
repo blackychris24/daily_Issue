@@ -18,7 +18,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  *
  *
  */
-@Profile("message")
+@Profile("message&!secured")
 @Configuration
 @EnableWebSocketMessageBroker
 public class ChattingWebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfigurer {

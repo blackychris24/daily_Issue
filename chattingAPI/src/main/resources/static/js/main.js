@@ -33,12 +33,10 @@ function connect(event) {
 
         var socket = new SockJS(wsUri);
         stompClient = Stomp.over(socket);
-
-        stompClient.connect({a: 'a1', b: 'b2'}, onConnected, onError);
+        stompClient.connect({}, onConnected, onError);
     }
     event.preventDefault();
 }
-
 
 
 function onConnected() {
