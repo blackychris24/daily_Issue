@@ -14,5 +14,6 @@ package com.example.daily_issue.chatting.domain.message;/**
 public enum ChatMessageType {
     CHAT,
     JOIN,
-    LEAVE
+    LEAVE,
+    ERROR
 }

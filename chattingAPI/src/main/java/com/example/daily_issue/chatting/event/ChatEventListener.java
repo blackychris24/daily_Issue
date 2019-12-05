@@ -1,7 +1,8 @@
 package com.example.daily_issue.chatting.event;
 
-import com.example.daily_issue.chatting.domain.message.ChatMessage;
 import com.example.daily_issue.chatting.domain.message.ChatMessageType;
+import com.example.daily_issue.chatting.domain.message.ChatMessageVO;
+import com.example.daily_issue.chatting.security.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -20,6 +21,9 @@ public class ChatEventListener {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+    @Autowired
+    private SecurityService securityService;
+
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         log.info("Received a new web socket connection");
@@ -30,12 +34,15 @@ public class ChatEventListener {
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
+        String name = headerAccessor.getUser().getName();
+
         System.out.println("DisconnectEvent : " + headerAccessor);
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if(username != null) {
             log.info("User Disconnected : " + username);
 
-            ChatMessage chatMessage = new ChatMessage();
+            ChatMessageVO chatMessage = new ChatMessageVO();
             chatMessage.setType(ChatMessageType.LEAVE);
             chatMessage.setSender(username);
 

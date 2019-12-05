@@ -16,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ChatMessage {
+public class ChatMessageVO {
     private ChatMessageType type;
     private String content;
     private String sender;

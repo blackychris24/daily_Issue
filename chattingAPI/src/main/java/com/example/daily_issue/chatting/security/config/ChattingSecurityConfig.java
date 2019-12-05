@@ -7,14 +7,12 @@ package com.example.daily_issue.chatting.security.config;/**
  * @since : 0.0.1-SNAPSHOT (2019-11-25)
  */
 
-import com.example.daily_issue.chatting.config.MessageURIConsts;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.daily_issue.chatting.config.websocket.MessageURIConsts;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -34,15 +32,6 @@ public class ChattingSecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-
-    // create default user
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("chris").password("{noop}1234").roles("USER");
-    }
-
-
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
@@ -52,19 +41,7 @@ public class ChattingSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    /*@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        //http.csrf().disable();
-        //http.cors().disable();
-
-        http.formLogin()
-                .and().httpBasic();
-
-        http.authorizeRequests()
-                .anyRequest().permitAll();
-    }*/
-
-
+    //@formatter:off
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -89,4 +66,5 @@ public class ChattingSecurityConfig extends WebSecurityConfigurerAdapter {
                         .anyRequest().authenticated()
                 );
     }
+    //@formatter:on
 }

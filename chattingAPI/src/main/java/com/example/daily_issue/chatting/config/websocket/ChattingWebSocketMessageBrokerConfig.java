@@ -1,4 +1,4 @@
-package com.example.daily_issue.chatting.config;/**
+package com.example.daily_issue.chatting.config.websocket;/**
  * - "portfolio" Project -
  * Created by blackychris24@gmail.com on 2019-11-24
  * Github : https://github.com/blackychris24
@@ -9,21 +9,24 @@ package com.example.daily_issue.chatting.config;/**
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
-import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
+import org.springframework.session.Session;
+import org.springframework.session.web.socket.config.annotation.AbstractSessionWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
  *
  *
  */
-@Profile("message&secured")
+@Profile("message")
 @Configuration
 @EnableWebSocketMessageBroker
-public class ChattingSecuredWebSocketMessageBrokerConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
+public class ChattingWebSocketMessageBrokerConfig<S extends Session>
+        extends AbstractSessionWebSocketMessageBrokerConfigurer<S>
+          implements WebSocketMessageBrokerConfigurer
+{
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -41,32 +44,14 @@ public class ChattingSecuredWebSocketMessageBrokerConfig extends AbstractSecurit
         */
     }
 
-    @Override
+    /*@Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint(MessageURIConsts.ENDPOINT).withSockJS();
+    }*/
+
+    @Override
+    protected void configureStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(MessageURIConsts.ENDPOINT).withSockJS();
     }
 
-    @Override
-    protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-
-        // authenticate
-        messages.anyMessage().authenticated();
-        messages.simpSubscribeDestMatchers(MessageURIConsts.APPLICATION + "/**").authenticated();
-        messages.simpSubscribeDestMatchers(MessageURIConsts.TOPIC + "/**").authenticated();
-
-        // authorize
-        messages.anyMessage().hasRole("USER");
-    }
-
-    @Override
-    protected boolean sameOriginDisabled() {
-        return true;
-        //return super.sameOriginDisabled();
-    }
-
-
-    @Override
-    protected void customizeClientInboundChannel(ChannelRegistration registration) {
-        super.customizeClientInboundChannel(registration);
-    }
 }

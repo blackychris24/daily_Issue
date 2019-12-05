@@ -24,8 +24,12 @@ var messageUri = '/app/chatting/room/';
 var wsUri = '/ws';
 
 function connect(event) {
-    username = document.querySelector('#name').value.trim();
 
+    var csrf = getCsrf();
+    var headers = {};
+    headers[csrf.headerName] = csrf.token;
+
+    username = document.querySelector('#name').value.trim();
     if(username) {
         //usernamePage.classList.add('hidden');
         //chatPage.classList.remove('hidden');
@@ -33,7 +37,7 @@ function connect(event) {
 
         var socket = new SockJS(wsUri);
         stompClient = Stomp.over(socket);
-        stompClient.connect({}, onConnected, onError);
+        stompClient.connect(headers, onConnected, onError);
     }
     event.preventDefault();
 }
@@ -68,7 +72,7 @@ function getRooms()
                 });
 
                 var roomNameElement = document.createElement('span');
-                roomNameElement.appendChild(document.createTextNode(room.name));
+                roomNameElement.appendChild(document.createTextNode(room.roomName));
 
                 roomElement.appendChild(roomNameElement);
 
