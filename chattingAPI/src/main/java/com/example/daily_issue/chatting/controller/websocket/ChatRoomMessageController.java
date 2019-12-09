@@ -9,8 +9,7 @@ package com.example.daily_issue.chatting.controller.websocket;/**
 
 import com.example.daily_issue.chatting.config.websocket.MessageURIConsts;
 import com.example.daily_issue.chatting.domain.message.ChatMessageVO;
-import com.example.daily_issue.chatting.security.service.SecurityService;
-import com.example.daily_issue.chatting.service.ChatSecurityService;
+import com.example.daily_issue.chatting.service.ChatLoginUserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -31,37 +30,39 @@ import java.io.IOException;
 public class ChatRoomMessageController {
 
     @Autowired
-    SecurityService securityService;
-    @Autowired
-    ChatSecurityService chatSecurityService;
+    ChatLoginUserSecurityService chatSecurityService;
 
-    @MessageMapping("/{roomId}/chat.sendMessage")
-    @SendTo(MessageURIConsts.TOPIC + "/{roomId}/chat")
-    public ChatMessageVO sendMessage(@DestinationVariable Long roomId, @Payload ChatMessageVO chatMessage) throws IOException {
+    @MessageMapping("/{roomId}"+MessageURIConsts.CHAT+".sendMessage")
+    @SendTo(MessageURIConsts.TOPIC + "/{roomId}" + MessageURIConsts.CHAT)
+    public ChatMessageVO sendMessage(@DestinationVariable Long roomId
+                                    , @Payload ChatMessageVO chatMessage) throws IOException {
         return chatMessage;
     }
 
-    @MessageMapping("/{roomId}/chat.addUser")
-    @SendTo(MessageURIConsts.TOPIC + "/{roomId}/chat")
+    @MessageMapping("/{roomId}"+MessageURIConsts.CHAT+".addUser")
+    @SendTo(MessageURIConsts.TOPIC + "/{roomId}" + MessageURIConsts.CHAT)
     public ChatMessageVO addUser(@DestinationVariable Long roomId,
                                  @Payload ChatMessageVO chatMessage,
                                  StompHeaderAccessor headerAccessor) {
-
-
-
-        // Add username in web socket session
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        /*// Add username in web socket session
+        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());*/
         return chatMessage;
     }
 
-    @SubscribeMapping("/{roomId}/chat")
+    @SubscribeMapping("/{roomId}" + MessageURIConsts.CHAT)
     public void subscribe(@DestinationVariable Long roomId, StompHeaderAccessor headerAccessor) {
-        if(chatSecurityService.isFisrtVisit())
+
+        chatSecurityService.updateRoomId(headerAccessor, roomId);
+
+
+
+
+        /*if(chatSecurityService.isFisrtVisit())
         {
             chatSecurityService.updateRoomId(roomId);
-            headerAccessor.setUser(securityService.getAuthentication());
-            headerAccessor.getSessionAttributes().put("roomId", roomId);
-        }
+            headerAccessor.setUser(chatSecurityService.getAuthentication());
+            // >>>>>>>>>>>> headerAccessor.getSessionAttributes().put("roomId", roomId);
+        }*/
         // login한 member의 정보를 가져온다.
         // 만일, 해당 방의 member가 아니라면 member로 등록함.
 

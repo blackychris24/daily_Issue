@@ -39,6 +39,8 @@ public class ChattingSecurityConfig extends WebSecurityConfigurerAdapter {
                         PathRequest.toStaticResources().atCommonLocations()
                 )
         ;
+        //SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+        //SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_GLOBAL); // cuz authentication object in listener
     }
 
     //@formatter:off

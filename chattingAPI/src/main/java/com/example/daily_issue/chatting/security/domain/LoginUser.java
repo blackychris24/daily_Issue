@@ -21,9 +21,7 @@ import org.springframework.security.core.userdetails.User;
 @Setter
 public class LoginUser extends User {
 
-
-    // 현재 활동중인 방 id / 음수일 경우 할당되지 않음
-    private Long currentRoomId = -1L;
+    private Long currentRoomId;
 
     private String userName;
     private String userNickName;
