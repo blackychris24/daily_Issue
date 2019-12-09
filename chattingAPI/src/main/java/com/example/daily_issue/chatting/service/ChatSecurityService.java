@@ -7,45 +7,69 @@ package com.example.daily_issue.chatting.service;/**
  * @since : 0.0.1-SNAPSHOT (2019-12-05)
  */
 
-import com.example.daily_issue.chatting.security.domain.LoginUser;
-import com.example.daily_issue.chatting.security.service.SecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.validation.constraints.NotNull;
+import java.security.Principal;
+import java.util.Collection;
 
 /**
  *
  *
  */
-@Service
-public class ChatSecurityService<T> {
+@Slf4j
+abstract class ChatSecurityService<T extends UserDetails> {
 
-    @Autowired
-    SecurityService securityService;
+    /*@Autowired
+    SimpUserRegistry simpUserRegistry;*/
 
-    public void updateRoomId(Long roomId)
+
+    Authentication getAuthentication(Principal wsPrincipal)
     {
-        LoginUser principal = securityService.getPrincipal();
-        principal.setCurrentRoomId(roomId);
-        securityService.updatePrincipal(principal);
+        Authentication authentication = (Authentication)wsPrincipal;
+        return authentication;
     }
 
-    public boolean isFisrtVisit()
+    T getPrincipal(Principal wsPrincipal)
     {
-        LoginUser principal = securityService.getPrincipal();
-        return principal.getCurrentRoomId() < 0;
+        /*Class<T> genericType = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), ChatSecurityService.class);
+        T principal = getPrincipal(wsPrincipal, genericType);*/
+
+        Authentication authentication = getAuthentication(wsPrincipal);
+        T principal = (T)authentication.getPrincipal();
+
+        return principal;
     }
 
-    public boolean isCorrectRoomId(Long roomId)
-    {
-        LoginUser principal = securityService.getPrincipal();
+    @SneakyThrows
+    Authentication getUpdatedAuthentication(
+            @NotNull Authentication originAuthentication
+            , Class<? extends AbstractAuthenticationToken> clazz
+            , @NotNull T fixedPrincipal) {
 
-        // 방 id가 음수 : 방 번호가 할당되지 않음
-        // 방 id가 양수이며 / 요청 방번호가 방입장 시 등록된 id와 동일하면 유효한 방 id가 맞음
-        return principal.getCurrentRoomId() >= 0 && principal.getCurrentRoomId() == roomId ? true : false;
+        Authentication fixedAuthentication = null;
+
+        // UsernamePasswordAuthenticationToken
+        if(clazz.isAssignableFrom(UsernamePasswordAuthenticationToken.class))
+        {
+            fixedAuthentication =
+                    clazz.getConstructor(Object.class, Object.class, Collection.class)
+                        .newInstance(fixedPrincipal
+                                , originAuthentication.getCredentials()
+                                , originAuthentication.getAuthorities());
+            ((AbstractAuthenticationToken)fixedAuthentication).setDetails(originAuthentication.getDetails());
+        }
+        if(fixedAuthentication == null)
+        {
+            log.warn("The target principal object has not been initialized.");
+            fixedAuthentication = originAuthentication;
+        }
+
+        return fixedAuthentication;
     }
-
-    /*public T convertWSPrincipal(Principal principal)
-    {
-        principal
-    }*/
 }

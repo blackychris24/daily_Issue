@@ -7,7 +7,9 @@ package com.example.daily_issue.chatting.config.websocket;/**
  * @since : 0.0.1-SNAPSHOT (2019-11-24)
  */
 
-import com.example.daily_issue.chatting.config.websocket.interceptor.TopicSubscriptionInterceptor;
+import com.example.daily_issue.chatting.config.websocket.interceptor.AddMessageSenderInterceptor;
+import com.example.daily_issue.chatting.config.websocket.interceptor.RoomInfoValidationInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.simp.SimpMessageType;
@@ -24,6 +26,11 @@ import org.springframework.security.config.annotation.web.socket.AbstractSecurit
 public class ChattingSecuredWebSocketMessageBrokerConfig
         extends AbstractSecurityWebSocketMessageBrokerConfigurer
 {
+
+    @Autowired
+    AddMessageSenderInterceptor addMessageSenderInterceptor;
+    @Autowired
+    RoomInfoValidationInterceptor roomInfoValidationInterceptor;
 
     //@formatter:off
     @Override
@@ -53,6 +60,13 @@ public class ChattingSecuredWebSocketMessageBrokerConfig
 
     @Override
     protected void customizeClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new TopicSubscriptionInterceptor());
+        registration.interceptors(
+                roomInfoValidationInterceptor
+                , addMessageSenderInterceptor);
     }
+
+    /*@Override
+    public void configureClientOutboundChannel(ChannelRegistration registration) {
+        registration.interceptors()
+    }*/
 }

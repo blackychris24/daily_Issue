@@ -93,11 +93,11 @@ function selectRoom(roomId)
     // Subscribe to the Public Topic
     stompClient.subscribe(messageUri + '/chat', onMessageReceived);
 
-    // Tell your username to the server
+    /*// Tell your username to the server
     stompClient.send(messageUri + "/chat.addUser",
         {},
         JSON.stringify({sender: username, type: 'JOIN'})
-    )
+    )*/
 
     connectingElement.classList.add('hidden');
 }
@@ -138,10 +138,10 @@ function onMessageReceived(payload) {
 
     if(message.type === 'JOIN') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' joined!';
+        //message.content = message.sender + ' joined!';
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' left!';
+        //message.content = message.sender + ' left!';
     } else {
         messageElement.classList.add('chat-message');
 
