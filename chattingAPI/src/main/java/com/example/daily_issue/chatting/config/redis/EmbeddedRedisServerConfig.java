@@ -22,7 +22,7 @@ import javax.annotation.PreDestroy;
  *
  *
  */
-@Profile("local")
+@Profile("embeddedRedis")
 @Configuration
 public class EmbeddedRedisServerConfig {
 

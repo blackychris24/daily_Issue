@@ -32,4 +32,6 @@ public class LoginUser extends User {
         this.userName = userName;
         this.userNickName = userNickName;
     }
+
+
 }

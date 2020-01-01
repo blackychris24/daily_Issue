@@ -9,8 +9,6 @@ package com.example.daily_issue.chatting.controller.websocket;/**
 
 import com.example.daily_issue.chatting.config.websocket.MessageURIConsts;
 import com.example.daily_issue.chatting.domain.message.ChatMessageVO;
-import com.example.daily_issue.chatting.service.ChatLoginUserSecurityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -29,13 +27,12 @@ import java.io.IOException;
 @MessageMapping(MessageURIConsts.TOPIC_CHAT_CONTEXT)
 public class ChatRoomMessageController {
 
-    @Autowired
-    ChatLoginUserSecurityService chatSecurityService;
 
     @MessageMapping("/{roomId}"+MessageURIConsts.CHAT+".sendMessage")
     @SendTo(MessageURIConsts.TOPIC + "/{roomId}" + MessageURIConsts.CHAT)
     public ChatMessageVO sendMessage(@DestinationVariable Long roomId
-                                    , @Payload ChatMessageVO chatMessage) throws IOException {
+            , @Payload ChatMessageVO chatMessage
+            , StompHeaderAccessor headerAccessor) throws IOException {
         return chatMessage;
     }
 
@@ -44,27 +41,11 @@ public class ChatRoomMessageController {
     public ChatMessageVO addUser(@DestinationVariable Long roomId,
                                  @Payload ChatMessageVO chatMessage,
                                  StompHeaderAccessor headerAccessor) {
-        /*// Add username in web socket session
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());*/
         return chatMessage;
     }
 
     @SubscribeMapping("/{roomId}" + MessageURIConsts.CHAT)
     public void subscribe(@DestinationVariable Long roomId, StompHeaderAccessor headerAccessor) {
-
-        chatSecurityService.updateRoomId(headerAccessor, roomId);
-
-
-
-
-        /*if(chatSecurityService.isFisrtVisit())
-        {
-            chatSecurityService.updateRoomId(roomId);
-            headerAccessor.setUser(chatSecurityService.getAuthentication());
-            // >>>>>>>>>>>> headerAccessor.getSessionAttributes().put("roomId", roomId);
-        }*/
-        // login한 member의 정보를 가져온다.
-        // 만일, 해당 방의 member가 아니라면 member로 등록함.
 
     }
 }

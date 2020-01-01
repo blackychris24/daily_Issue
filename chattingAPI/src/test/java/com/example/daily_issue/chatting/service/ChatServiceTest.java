@@ -26,7 +26,7 @@ import java.util.List;
 class ChatServiceTest {
 
     @Autowired
-    ChatService chatService;
+    ChatRoomService chatService;
 
     @Test
     @DisplayName("전체 방 목록")

@@ -24,6 +24,15 @@ public class ChatRoomRESP {
 
     private Long id;
 
+    // 방 이름
     private String roomName;
 
+    // 현재는 오픈채팅을 기준으로 작성한다.
+    private ChatRoomType roomType;
+
+    // 채팅방 검색 가능여부
+    private boolean isSearchable;
+
+    // 채팅방 설정 최대인원
+    private int defaultMemberNum;
 }

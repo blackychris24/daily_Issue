@@ -1,4 +1,4 @@
-package com.example.daily_issue.chatting.dao.repository.room;/**
+package com.example.daily_issue.chatting.dao.repository.member;/**
  * - "portfolio" Project -
  * Created by blackychris24@gmail.com on 2019-11-11
  * Github : https://github.com/blackychris24
@@ -18,12 +18,11 @@ import java.util.List;
  *
  *
  */
-interface RoomCustomRepository {
+interface MemberCustomRepository {
 
-    List<ChatRoomEntity> memberRoomList(Long chatMemberId);
-    List<ChatRoomEntity> memberRoomList(ChatMemberEntity chatMemberEntity);
+    List<ChatMemberEntity> roomMemberList(Long chatRoomId);
+    List<ChatMemberEntity> roomMemberList(ChatRoomEntity chatRoomEntity);
 
-    Page<ChatRoomEntity> memberRoomList(Long chatMemberId, Pageable pageable);
-    Page<ChatRoomEntity> memberRoomList(ChatMemberEntity chatMemberEntity, Pageable pageable);
-
+    Page<ChatMemberEntity> roomMemberList(Long chatRoomId, Pageable pageable);
+    Page<ChatMemberEntity> roomMemberList(ChatRoomEntity chatRoomEntity, Pageable pageable);
 }

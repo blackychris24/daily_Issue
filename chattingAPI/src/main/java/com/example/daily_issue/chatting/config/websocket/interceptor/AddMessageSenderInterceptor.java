@@ -9,7 +9,7 @@ package com.example.daily_issue.chatting.config.websocket.interceptor;/**
 
 import com.example.daily_issue.chatting.domain.message.ChatMessageVO;
 import com.example.daily_issue.chatting.security.domain.LoginUser;
-import com.example.daily_issue.chatting.service.ChatLoginUserSecurityService;
+import com.example.daily_issue.chatting.service.websocket.ChatLoginUserSecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -38,7 +38,10 @@ public class AddMessageSenderInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
+
         LoginUser principal = chatSecurityService.getPrincipal(headerAccessor);
+
+        System.out.println("PRESEND " + headerAccessor.getMessageId());
 
         if(StompCommand.SEND.equals(headerAccessor.getCommand()))
         {
@@ -54,5 +57,11 @@ public class AddMessageSenderInterceptor implements ChannelInterceptor {
         }
 
         return message;
+    }
+
+    @Override
+    public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
+        System.out.println("POSTSEND " + headerAccessor.getMessageId());
     }
 }

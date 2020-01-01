@@ -1,4 +1,4 @@
-package com.example.daily_issue.chatting.service;/**
+package com.example.daily_issue.chatting.service.websocket;/**
  * - "portfolio" Project -
  * Created by blackychris24@gmail.com on 2019-12-07
  * Github : https://github.com/blackychris24

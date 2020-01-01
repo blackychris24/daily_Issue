@@ -24,9 +24,16 @@ public class ChatMemberRESP {
 
     private Long id;
 
+    // 사용자 아이디
     private String userId;
-    private String userPw;
+
+    // 사용자 성명
     private String userName;
+
+    // 사용자 활동명
     private String userNickName;
+
+    // 사용자 종류
+    private ChatMemberType chatMemberType;
 
 }

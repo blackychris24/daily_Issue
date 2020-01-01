@@ -24,9 +24,19 @@ public class ChatMemberREQ {
 
     private Long id;
 
+    // 사용자 아이디
     private String userId;
+
+    // 사용자 패스워드
     private String userPw;
+
+    // 사용자 성명
     private String userName;
+
+    // 사용자 활동명
     private String userNickName;
+
+    // 사용자 종류not
+    private ChatMemberType chatMemberType = ChatMemberType.USER;
 
 }

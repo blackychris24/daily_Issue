@@ -1,13 +1,4 @@
 spring:
-  profiles: local
-
-  data:
-    web:
-      pageable:
-        default-page-size: 10
-        max-page-size: 100
-        one-indexed-parameters: true
-        qualifier-delimiter:
   ### Database ###
   datasource:
     #url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -18,6 +9,7 @@ spring:
     continue-on-error: true
     hikari:
       jdbc-url: jdbc:h2:tcp://localhost:9092/mem:testdb;MVCC=true
+    #initialization-mode: NEVER
   h2:
     console:
       enabled: true
@@ -50,7 +42,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-
 
 ### logging - hibernate ###
 logging:

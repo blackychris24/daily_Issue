@@ -8,7 +8,6 @@ package com.example.daily_issue.chatting.config.websocket;/**
  */
 
 import com.example.daily_issue.chatting.config.websocket.interceptor.AddMessageSenderInterceptor;
-import com.example.daily_issue.chatting.config.websocket.interceptor.RoomInfoValidationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -29,8 +28,6 @@ public class ChattingSecuredWebSocketMessageBrokerConfig
 
     @Autowired
     AddMessageSenderInterceptor addMessageSenderInterceptor;
-    @Autowired
-    RoomInfoValidationInterceptor roomInfoValidationInterceptor;
 
     //@formatter:off
     @Override
@@ -60,9 +57,7 @@ public class ChattingSecuredWebSocketMessageBrokerConfig
 
     @Override
     protected void customizeClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(
-                roomInfoValidationInterceptor
-                , addMessageSenderInterceptor);
+        registration.interceptors(addMessageSenderInterceptor);
     }
 
     /*@Override

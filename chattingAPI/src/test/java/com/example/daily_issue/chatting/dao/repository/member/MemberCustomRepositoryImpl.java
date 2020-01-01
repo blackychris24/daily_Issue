@@ -13,7 +13,6 @@ import com.example.daily_issue.chatting.domain.room.ChatRoomEntity;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import static com.example.daily_issue.chatting.domain.participation.QChatPartici
  *
  *
  */
-@NoRepositoryBean
+//class MemberCustomRepositoryImpl extends QuerydslRepositorySupport implements MemberCustomRepository {
 class MemberCustomRepositoryImpl extends QueryDslBaseRepositorySupport implements MemberCustomRepository {
 
     public MemberCustomRepositoryImpl() {

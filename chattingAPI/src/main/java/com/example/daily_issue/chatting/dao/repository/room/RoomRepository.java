@@ -7,4 +7,5 @@ public interface RoomRepository extends BaseRepository<ChatRoomEntity, Long>, Ro
 
     /*public List<BasicTaskEntity> findByTaskOwner(Member user);*/
 
+
 }

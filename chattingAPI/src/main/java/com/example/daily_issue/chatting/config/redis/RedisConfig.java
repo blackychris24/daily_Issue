@@ -42,10 +42,9 @@ public class RedisConfig {
     public RedisTemplate<?, ?> redisTemplate()
     {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;
     }
-
-
 
 }
